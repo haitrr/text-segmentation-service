@@ -70,8 +70,15 @@ func handleSegment(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	http.HandleFunc("/segments", handleSegment)
-	err := http.ListenAndServe(":5421", nil)
-	if err != nil {
-		panic(err)
+	// [START setting_port]
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+		log.Printf("Defaulting to port %s", port)
+	}
+
+	log.Printf("Listening on port %s", port)
+	if err := http.ListenAndServe(":"+port, nil); err != nil {
+		log.Fatal(err)
 	}
 }
